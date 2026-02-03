@@ -1,4 +1,7 @@
-import React, {  use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Register from "./pages/register";
+import Login from "./pages/login";
 import axios from "axios";
 
 function App() {
@@ -20,8 +23,18 @@ function App() {
                     <strong>{book.title}</strong> by {book.author}
                 </li>
             )}
-        </ul>
-        {/* TODO: Add search, loging, book detail, admin controls */}
+            </ul>
+            {/* TODO: Add search, loging, book detail, admin controls */}
+            <Router>
+                <nav style={{ padding: '1rem' }}>
+                    <Link to="/register" style={{ marginRight: '1rem' }}>Register</Link>
+                    <Link to="/login">Login</Link>
+                </nav>
+                <Routes>
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </Router>
     </div>
     );
 }
