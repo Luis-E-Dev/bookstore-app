@@ -1,10 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Security
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, utils
 from .schemas import UserOut, UserCreate
 from .database import SessionLocal, engine, Base
-from replit import db
 from app.utils import (
     get_password_hash,
     create_access_token,
@@ -12,9 +12,20 @@ from app.utils import (
 )
 from uuid import uuid4
 from typing import List
+from jose import JWTError, jwt
 import uvicorn
 
 app = FastAPI(title="Bookstore API", description="API for managing bookstore inventory")
+
+ADMIN_EMAIL = "luisescalante0108@gmail.com"
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Temporary in-memory database
 books = [
@@ -22,10 +33,12 @@ books = [
     {"id": 2, "title": "Clean Code", "author": "Robert C. Martin"}
 ]
 
+db = {}
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Create users
-@app.post('/signup', summary="Create a new user", response_model=UserOut)
+@app.post('/signup', response_model=UserOut)
 async def create_user(data: UserCreate):
     # querying database to check if user already exists
     user = db.get(data.email, None)
@@ -41,6 +54,7 @@ async def create_user(data: UserCreate):
     }
     db[data.email] = user #saving user in database
     return user
+print('Current users in database:', db)
 
 @app.post('/login', summary="Create access and refresh tokens for user", response_model=dict)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -112,6 +126,33 @@ def update_book(book_id: int, book: dict, token: str = Depends(oauth2_scheme)):
     raise HTTPException(
         status_code=404,
         detail={"message": "Book not found"})
+
+# Private: Exclusively for Admins to fetch email and passwords
+@app.get("/users/", response_model=List[UserOut])
+def get_users(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, utils.SECRET_KEY, algorithms=[utils.ALGORITHM])
+        email = payload.get("sub") or payload.get("email")
+        if email != ADMIN_EMAIL:
+            return [ { "id": user["id"], "email": user["email"] } for user in db.values() ]
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to access this resource"
+            )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials"
+        )
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Bookstore API"}
+
+@app.get("/debug/users")
+def debug_users():
+    return list(db.values())
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
