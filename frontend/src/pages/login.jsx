@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
     const [form, setForm] = useState({ email: '', password: '' });
     const [message, setMessage] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,9 +17,21 @@ export default function Login() {
         e.preventDefault();
         setMessage('');
         try {
-            const response = await axios.post('http://localhost:8000/login', form);
-            setMessage('Login successful! Token: ' + response.data.access_token);
+            const formData = new URLSearchParams();
+            formData.append('username', form.email);
+            formData.append('password', form.password);
+            const response = await axios.post('http://localhost:8000/login', formData, {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            const token = response.data.access_token;
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            login(token);
             setForm({ email: '', password: '' });
+            if (payload.role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
         } catch (err) {
             setMessage(err.response?.data?.detail || 'Login failed. Please try again.');
         }

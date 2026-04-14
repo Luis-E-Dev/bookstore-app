@@ -1,23 +1,23 @@
 # Bookstore App
+Full-stack bookstore inventory app built with FastAPI + React.
 
-Full-stack bookstore demo, built for my portfolio.
+## Features
+- JWT authentication with role-based access (admin/user)
+- Admin dashboard with full CRUD for books
+- Secure password hashing, rate limiting, CORS protection
 
-![Bookstore Screenshot](frontend/public/images/homepage.png)
+## Tech Stack
+Backend: Python, FastAPI, SQLAlchemy, SQLite, JWT
+Frontend: React, React Router, Axios, Context API
 
 ## Setup
-
-**Backend:**
-```sh
+### Backend
 cd backend
 pip install -r requirements.txt
-cd app
-python main.py
-```
+python -m app.init_db
+uvicorn app.main:app --reload
 
-**Frontend:**
-```sh
+### Frontend
 cd frontend
 npm install
 npm start
-```
-...
