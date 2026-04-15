@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api";
 
-const emptyForm = { title: "", author: "", desc: "", category: "", image_url: ""};
+const emptyForm = { title: "", author: "", desc: "", category: "", image_url: "", read_more_url: "" };
 
 export default function AdminDashboard() {
     const [books, setBooks] = useState([]);
@@ -36,6 +36,8 @@ export default function AdminDashboard() {
             author: book.author,
             desc: book.desc || "",
             category: book.category || "",
+            image_url: book.image_url || "",
+            read_more_url: book.read_more_url || "",
         });
         setMessage("");
     }
@@ -126,6 +128,14 @@ export default function AdminDashboard() {
                     value={form.image_url}
                     placeholder="Image URL (optional)"
                     onChange={handleChange}
+                    style={{ display: "block", marginBottom: 8, width: 300 }}
+                />
+                <input
+                    name="read_more_url"
+                    value={form.read_more_url}
+                    placeholder="Read More URL (required)"
+                    onChange={handleChange}
+                    required
                     style={{ display: "block", marginBottom: 8, width: 300 }}
                 />
                 <button type="submit" style={{ marginRight: 8 }}>

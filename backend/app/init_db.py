@@ -36,11 +36,11 @@ def seed_books(db, added_by_id):
         print("Books already seeded, skipping.")
         return
     sample_books = [
-        Book(title="The Pragmatic Programmer", author="Andrew Hunt", desc="A guide to software craftsmanship.", category="Programming", added_by=added_by_id),
-        Book(title="Clean Code", author="Robert C. Martin", desc="How to write readable, maintainable code.", category="Programming", added_by=added_by_id),
-        Book(title="Design Patterns", author="Gang of Four", desc="Classic software design patterns.", category="Architecture", added_by=added_by_id),
-        Book(title="You Don't Know JS", author="Kyle Simpson", desc="Deep dive into JavaScript.", category="JavaScript", added_by=added_by_id),
-        Book(title="The Lean Startup", author="Eric Ries", desc="Build products customers want.", category="Business", added_by=added_by_id),
+        Book(title="The Pragmatic Programmer", author="Andrew Hunt", desc="A guide to software craftsmanship.", category="Programming", added_by=added_by_id, read_more_url="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/"),
+        Book(title="Clean Code", author="Robert C. Martin", desc="How to write readable, maintainable code.", category="Programming", added_by=added_by_id, read_more_url="https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"),
+        Book(title="Design Patterns", author="Gang of Four", desc="Classic software design patterns.", category="Architecture", added_by=added_by_id, read_more_url="https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612"),
+        Book(title="You Don't Know JS", author="Kyle Simpson", desc="Deep dive into JavaScript.", category="JavaScript", added_by=added_by_id, read_more_url="https://github.com/getify/You-Dont-Know-JS"),
+        Book(title="The Lean Startup", author="Eric Ries", desc="Build products customers want.", category="Business", added_by=added_by_id, read_more_url="https://www.amazon.com/Lean-Startup-Entrepreneurs-Continuous-Innovation/dp/0307887898"),
     ]
     db.add_all(sample_books)
     db.commit()
