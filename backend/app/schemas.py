@@ -29,6 +29,7 @@ class BookCreate(BaseModel):
     desc: str | None = None
     category: str | None = None
     image_url: str | None = None
+    read_more_url: str
 
 class BookRead(BaseModel):
     id: int
@@ -38,7 +39,7 @@ class BookRead(BaseModel):
     category: str | None = None
     added_by: int
     image_url: str | None = None
-    
+    read_more_url: str
     class Config:
         from_attributes = True
 
@@ -48,6 +49,8 @@ class BookUpdate(BaseModel):
     desc: str | None = None
     category: str | None = None
     image_url: str | None = None
+    read_more_url: str | None = None
+
 
     class Config:
         from_attributes = True

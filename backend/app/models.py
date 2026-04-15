@@ -21,3 +21,4 @@ class Book(Base):
     category = Column(String, nullable=True)
     added_by = Column(Integer, nullable=False)
     image_url = Column(String, nullable=True)
+    read_more_url = Column(String, nullable=False)
