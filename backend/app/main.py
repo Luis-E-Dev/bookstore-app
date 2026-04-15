@@ -33,7 +33,7 @@ ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
+    allow_origins=[os.getenv("FRONTEND_URL", "https://luis-e-dev.github.io/bookstore-app/portfolio/index.html")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
