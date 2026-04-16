@@ -1,10 +1,15 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .models import Base
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://bookstore_db_3yhx_user:jcEDGOkISHXFzY1xjkBAlUIjavOlMYHn@dpg-d7gir1hj2pic73bcvttg-a/bookstore_db_3yhx")
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL environment variable is not set. "
+        "Please set it to a valid PostgreSQL connection string "
+        "(e.g., postgresql://user:password@host/dbname)."
+    )
 
 # Render provides PostgreSQL URLs starting with "postgres://" but SQLAlchemy
 # requires "postgresql://" — fix it automatically if needed
