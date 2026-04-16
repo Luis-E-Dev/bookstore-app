@@ -9,19 +9,31 @@ const BooksList = () => {
     const [error, setError] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     const AUTO_PLAY_INTERVAL = 5000;
 
-    useEffect(() => {
+    const fetchBooks = (isRefresh = false) => {
+        if (isRefresh) setRefreshing(true);
         api.get("/books/")
             .then(res => {
                 setBooks(res.data);
                 setLoading(false);
+                setError(null);
+                if (isRefresh) {
+                    setCurrentIndex(0);
+                    setRefreshing(false);
+                }
             })
             .catch(err => {
                 setError("Failed to load books.");
                 setLoading(false);
+                setRefreshing(false);
             });
+    };
+
+    useEffect(() => {
+        fetchBooks();
     }, []);
 
     useEffect(() => {
@@ -52,14 +64,24 @@ const BooksList = () => {
         <div className="books-page">
             <div className="carousel-header">
                 <h1 className="books-header">Books</h1>
-                <label className="auto-play-toggle">
-                    <input 
-                        type="checkbox" 
-                        checked={isAutoPlay}
-                        onChange={e => setIsAutoPlay(e.target.checked)}
-                    />
-                    <span>Auto-play</span>
-                </label>
+                <div className="carousel-controls">
+                    <label className="auto-play-toggle">
+                        <input 
+                            type="checkbox" 
+                            checked={isAutoPlay}
+                            onChange={e => setIsAutoPlay(e.target.checked)}
+                        />
+                        <span>Auto-play</span>
+                    </label>
+                    <button
+                        className="refresh-btn"
+                        onClick={() => fetchBooks(true)}
+                        disabled={refreshing}
+                        aria-label="Refresh books"
+                    >
+                        {refreshing ? "Refreshing…" : "↻ Refresh"}
+                    </button>
+                </div>
             </div>
 
             <div className="carousel-wrapper">
