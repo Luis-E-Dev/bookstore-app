@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request, status
+from fastapi import FastAPI, Depends, HTTPException, Request, status, BackgroundTasks
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, utils
@@ -79,7 +79,8 @@ async def create_user(request: Request, data: UserCreate, db: Session = Depends(
     user = {
         'email': data.email,
         'hashed_password': utils.get_password_hash(data.password),
-        'user_role': 'user'
+        'user_role': 'user',
+        'notify_new_books': data.notify_new_books,
     }
     new_user = User(**user)
     db.add(new_user)
@@ -122,7 +123,7 @@ def get_book(book_id: int, db: Session = Depends(get_db)):
 
 # Protected endpoint: add a new book (only for admin)
 @app.post("/books/", response_model=BookRead, status_code=201)
-def add_books(book: BookCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def add_books(book: BookCreate, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     if current_user.user_role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -132,6 +133,11 @@ def add_books(book: BookCreate, current_user: User = Depends(get_current_user), 
     db.add(new_book)
     db.commit()
     db.refresh(new_book)
+    subscribers = db.query(User).filter(User.notify_new_books == True).all()
+    if subscribers:
+        from .email_service import send_new_book_notification
+        emails = [u.email for u in subscribers]
+        background_tasks.add_task(send_new_book_notification, new_book.title, new_book.author, new_book.read_more_url, emails)
     return new_book
 
 # Protected endpoint: delete a book from library

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
@@ -10,6 +10,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     user_role = Column(String, default="user", nullable=False)
+    notify_new_books = Column(Boolean, default=False, nullable=False)
 
 class Book(Base):
     __tablename__ = "books"

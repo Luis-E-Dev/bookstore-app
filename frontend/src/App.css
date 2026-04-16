@@ -33,12 +33,6 @@ body {
   letter-spacing: -1px;
 }
 
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
 .auto-play-toggle {
   display: flex;
   align-items: center;
@@ -53,29 +47,6 @@ body {
   width: 18px;
   height: 18px;
 }
-
-.refresh-btn {
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 0.3rem 0.75rem;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: #555;
-  transition: all 0.2s;
-}
-
-.refresh-btn:hover:not(:disabled) {
-  border-color: #888;
-  color: #222;
-  background: #f5f5f5;
-}
-
-.refresh-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 
 .carousel-wrapper {
   display: flex;

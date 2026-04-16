@@ -4,6 +4,7 @@ import re
 class UserCreate(BaseModel):
     email: str
     password: str
+    notify_new_books: bool = False
 
     @field_validator("password")
     @classmethod
