@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from .models import Base
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://bookstore_db_3yhx_user:jcEDGOkISHXFzY1xjkBAlUIjavOlMYHn@dpg-d7gir1hj2pic73bcvttg-a/bookstore_db_3yhx")
 
 # Render provides PostgreSQL URLs starting with "postgres://" but SQLAlchemy
 # requires "postgresql://" — fix it automatically if needed
