@@ -2,12 +2,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .models import Base
+import os
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app.db")
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+# Render provides PostgreSQL URLs starting with "postgres://" but SQLAlchemy
+# requires "postgresql://" — fix it automatically if needed
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# SQLite needs check_same_thread=False; PostgreSQL does not
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
