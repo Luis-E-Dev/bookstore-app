@@ -13,7 +13,7 @@ export default function Register() {
         e.preventDefault();
         setMessage('');
         try {
-            await axios.post('http://localhost:8000/signup', form);
+            await axios.post('https://bookstore-api-zz2j.onrender.com/signup', form);
             setMessage('Registration successful! You can now log in.');
             setForm({ email: '', password: '' });
         } catch (err) {
