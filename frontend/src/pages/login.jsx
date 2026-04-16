@@ -20,7 +20,7 @@ export default function Login() {
             const formData = new URLSearchParams();
             formData.append('username', form.email);
             formData.append('password', form.password);
-            const response = await axios.post('https://bookstore-api-zz2j.onrender.com', formData, {
+            const response = await axios.post('https://bookstore-api-zz2j.onrender.com/login', formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             const token = response.data.access_token;
