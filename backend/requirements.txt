@@ -8,3 +8,4 @@ python-multipart
 python-dotenv
 slowapi
 psycopg2-binary
+resend
