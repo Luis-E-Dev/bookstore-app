@@ -66,7 +66,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         )
 
 # Create users
-@app.post('/signup', response_model=UserOut)
+@app.post('/register', response_model=UserOut)
 @limiter.limit("5/15minutes")
 async def create_user(request: Request, data: UserCreate, db: Session = Depends(get_db)):
     # querying database to check if user already exists
