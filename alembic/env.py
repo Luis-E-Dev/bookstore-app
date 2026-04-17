@@ -1,8 +1,14 @@
 import os
 from logging.config import fileConfig
+from pathlib import Path
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from alembic import context
+
+# Load .env from backend/ so DATABASE_URL is available when running alembic
+# from the project root (e.g. `alembic upgrade head`)
+load_dotenv(Path(__file__).resolve().parents[1] / "backend" / ".env")
 
 # ✅ import your Base from the app
 from app.models import Base  # adjust if needed
@@ -20,6 +26,9 @@ database_url = os.getenv("DATABASE_URL")
 if database_url:
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
+    # Use psycopg (v3) driver to match the app's database.py
+    if "postgresql://" in database_url and "+psycopg" not in database_url:
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
     config.set_main_option("sqlalchemy.url", database_url)
 
 def run_migrations_offline() -> None:
