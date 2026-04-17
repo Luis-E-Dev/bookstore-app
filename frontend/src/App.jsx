@@ -13,7 +13,7 @@ function App() {
             <Router>
                 <nav style={{ padding: '1rem' }}>
                     <Link to="/register" style={{ marginRight: '1rem' }}>Register</Link>
-                    <Link to="/login" state={{ marginRight: '1rem' }}>Login</Link>
+                    <Link to="/login" style={{ marginRight: '1rem' }}>Login</Link>
                     <Link to="https://luis-e-dev.github.io/bookstore-app/portfolio/index.html">Portfolio</Link>
                 </nav>
                 <Routes>
