@@ -9,11 +9,12 @@ function App() {
 
     return (
         <div style={{ margin: '2rem' }}>
-            <h1>Bookstore Inventory</h1>
+            <h1>Bookstore App</h1>
             <Router>
                 <nav style={{ padding: '1rem' }}>
                     <Link to="/register" style={{ marginRight: '1rem' }}>Register</Link>
                     <Link to="/login">Login</Link>
+                    <Link to="https://bookstore-app-hazel.vercel.app/">Portfolio</Link>
                 </nav>
                 <Routes>
                     <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
